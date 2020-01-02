@@ -30,10 +30,7 @@ export const server = http.createServer((req, res) => {
         <head>
           <meta charSet="utf-8" />
           <title>HTTP2 Webapp Demo</title>
-          <meta
-            name="viewport"
-            content="widget=device-width, initial-scale=1"
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
           {stylesheets.map(href => (
             <link href={href} key={href} rel="stylesheet" />
           ))}
