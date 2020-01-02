@@ -6,9 +6,10 @@ services:
     volumes:
       - "static:/usr/src/app/dist"
   proxy:
+    container_name: proxy
     depends_on:
       - app
-    image: nginx
+    image: nginx:alpine
     ports:
       - "4000:443"
     volumes:
