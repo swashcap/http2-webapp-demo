@@ -8,11 +8,14 @@ import { App } from './app';
 
 const stylesheets: string[] = [];
 const scripts: string[] = [];
+const linkHeader: string[] = [];
 
 Object.values<string>(require('../dist/manifest.json')).forEach(entry => {
   if (entry.includes('.css')) {
+    linkHeader.push(`<${entry}>; as=style; rel=preload`);
     stylesheets.push(`/dist/${entry}`);
   } else if (entry.includes('.js')) {
+    linkHeader.push(`<${entry}>; as=script; rel=preload`);
     scripts.push(`/dist/${entry}`);
   }
 });
@@ -25,10 +28,7 @@ export const server = http.createServer((req, res) => {
     'Content-Type': 'text/html',
     // Add a `Link` header, which nginx will use to push assets
     // https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/#automatic-push
-    Link: stylesheets.reduce<string>((link, href) => {
-      const item = `<${href}>; as=style; rel=preload`;
-      return link ? `${link}, ${item}` : item;
-    }, ''),
+    Link: linkHeader,
   });
 
   res.write('<!doctype html>', () => {
