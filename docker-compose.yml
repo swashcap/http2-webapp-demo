@@ -9,7 +9,7 @@ services:
     container_name: proxy
     depends_on:
       - app
-    image: nginx:alpine
+    image: nginx:latest
     ports:
       - "4000:443"
     volumes:
