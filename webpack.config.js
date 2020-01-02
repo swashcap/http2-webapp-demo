@@ -1,3 +1,4 @@
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WepbackManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
 const webpackNodeExternals = require('webpack-node-externals');
@@ -21,7 +22,20 @@ const config = {
             },
           },
           {
-            exclude: /\.(js|jsx|json|ts|tsx)$/,
+            // exclude: /node_modules/,
+            test: /\.css$/,
+            use: [
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  hmr: !isProdEnv,
+                },
+              },
+              'css-loader',
+            ],
+          },
+          {
+            exclude: /\.(css|js|jsx|json|ts|tsx)$/,
             loader: 'file-loader',
           },
         ],
@@ -52,14 +66,27 @@ module.exports = [
         ? '[name].[contenthash].bundle.js'
         : '[name].bundle.js',
     },
-    plugins: [new WepbackManifestPlugin()],
+    plugins: [
+      new MiniCssExtractPlugin({
+        chunkFilename: isProdEnv
+          ? '[id].[chunkhash].chunk.css'
+          : '[id].chunk.css',
+        filename: isProdEnv ? '[name].[contenthash].css' : '[name].css',
+      }),
+      new WepbackManifestPlugin(),
+    ],
   },
   {
     ...config,
     entry: {
       server: './src/server.tsx',
     },
-    externals: [webpackNodeExternals()],
+    externals: [
+      webpackNodeExternals(),
+      {
+        '../dist/manifest.json': 'require("./manifest.json")',
+      },
+    ],
     optimization: {
       ...config.optimization,
       minimize: false,

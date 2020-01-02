@@ -6,6 +6,17 @@ import { renderToNodeStream } from 'react-dom/server';
 
 import { App } from './app';
 
+const stylesheets: string[] = [];
+const scripts: string[] = [];
+
+Object.values<string>(require('../dist/manifest.json')).forEach(entry => {
+  if (entry.includes('.css')) {
+    stylesheets.push(`/dist/${entry}`);
+  } else if (entry.includes('.js')) {
+    scripts.push(`/dist/${entry}`);
+  }
+});
+
 const port = process.env.PORT || 3000;
 
 export const server = http.createServer((req, res) => {
@@ -15,7 +26,7 @@ export const server = http.createServer((req, res) => {
   });
   res.write('<!doctype html>', () => {
     renderToNodeStream(
-      <html lang="en">
+      <html className="lh-copy sans-serif" lang="en">
         <head>
           <meta charSet="utf-8" />
           <title>HTTP2 Webapp Demo</title>
@@ -23,11 +34,17 @@ export const server = http.createServer((req, res) => {
             name="viewport"
             content="widget=device-width, initial-scale=1"
           />
+          {stylesheets.map(href => (
+            <link href={href} key={href} rel="stylesheet" />
+          ))}
         </head>
         <body>
           <div id="app">
             <App />
           </div>
+          {scripts.map(src => (
+            <script key={src} src={src}></script>
+          ))}
         </body>
       </html>
     ).pipe(res);

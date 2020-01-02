@@ -7,7 +7,7 @@ export const App: React.FunctionComponent<AppProps> = ({
   className,
   ...rest
 }) => (
-  <div className={classNames('app', className)} {...rest}>
-    <h1>Hello, World!</h1>
+  <div className={classNames('center mw3 pv3', className)} {...rest}>
+    <h1 className="f2 fw4 m0">Hello, World!</h1>
   </div>
 );
