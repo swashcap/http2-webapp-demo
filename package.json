@@ -8,13 +8,23 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/runtime": "^7.7.7",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "babel-loader": "^8.0.6",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
   },
   "scripts": {
-    "format": "prettier --write '*.{js,json,jsx}'"
+    "build": "NODE_ENV=production webpack",
+    "clean": "rm -rf dist",
+    "format": "prettier --write '*.{js,json,jsx,ts,tsx}'"
   }
 }
