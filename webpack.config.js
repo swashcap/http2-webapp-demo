@@ -3,14 +3,19 @@ const path = require('path');
 const isProdEnv = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index.tsx',
   mode: isProdEnv ? 'production' : 'development',
   module: {
     rules: [
       {
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        test: /\.(js|jsx|ts|tsx)$/,
+        test: /\.tsx?$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
+        },
       },
     ],
   },
