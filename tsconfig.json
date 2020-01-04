@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
+    "jsxFactory": "h",
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,

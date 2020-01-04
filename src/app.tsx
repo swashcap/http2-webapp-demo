@@ -1,12 +1,9 @@
-import React from 'react';
+import { FunctionComponent, JSX, h } from 'preact';
 import classNames from 'classnames';
 
-export type AppProps = React.HTMLAttributes<HTMLDivElement>;
+export type AppProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export const App: React.FunctionComponent<AppProps> = ({
-  className,
-  ...rest
-}) => (
+export const App: FunctionComponent<AppProps> = ({ className, ...rest }) => (
   <div className={classNames('center mw7 pa3', className)} {...rest}>
     <h1 className="f2 fw4 mb3 mt0 tc">Hello, World!</h1>
     <p>
