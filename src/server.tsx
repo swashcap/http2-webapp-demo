@@ -1,22 +1,23 @@
 import 'hard-rejection/register';
 
+import { Readable } from 'stream';
 import { h } from 'preact';
 import http from 'http';
 import render from 'preact-render-to-string';
 
 import { App } from './app';
 
-const stylesheets: string[] = [];
-const scripts: string[] = [];
 const linkHeader: string[] = [];
+let stylesheets = '';
+let scripts = '';
 
 Object.values<string>(require('../dist/manifest.json')).forEach(entry => {
   if (entry.includes('.css')) {
     linkHeader.push(`</dist/${entry}>; as=style; rel=preload`);
-    stylesheets.push(`/dist/${entry}`);
+    stylesheets += `<link href="/dist/${entry}" rel="stylesheet">`;
   } else if (entry.includes('.js')) {
     linkHeader.push(`</dist/${entry}>; as=script; rel=preload`);
-    scripts.push(`/dist/${entry}`);
+    scripts += `<script src="/dist/${entry}"></script>`;
   }
 });
 
@@ -29,6 +30,18 @@ export const server = http.createServer((req, res) => {
     // https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/#automatic-push
     Link: linkHeader,
   });
+
+  Readable.from(
+    `${JSON.stringify({
+      data: {
+        statusCode: 200,
+        url: req.url,
+      },
+      tags: ['info', 'request'],
+      time: new Date().toISOString(),
+    })}\n`
+  ).pipe(process.stdout);
+
   res.write(
     `<!doctype html>
 <html className="lh-copy sans-serif" lang="en">
@@ -36,9 +49,7 @@ export const server = http.createServer((req, res) => {
     <meta charSet="utf-8">
     <title>HTTP2 Webapp Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${stylesheets
-      .map(href => `<link href="${href}" rel="stylesheet">`)
-      .join('')}
+    ${stylesheets}
   </head>
   <body>`,
     error => {
@@ -51,7 +62,7 @@ export const server = http.createServer((req, res) => {
         <App />
       </div>
     )}
-    ${scripts.map(src => `<script src="${src}"></script>`).join('')}
+    ${scripts}
   </body>
 </html>`);
       }
@@ -60,5 +71,11 @@ export const server = http.createServer((req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server listening at ${port}`);
+  console.log(
+    JSON.stringify({
+      data: `Server listening at ${port}`,
+      tags: ['info', 'server'],
+      time: new Date().toISOString(),
+    })
+  );
 });
