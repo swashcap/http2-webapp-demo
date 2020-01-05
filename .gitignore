@@ -107,4 +107,5 @@ dist
 .vscode-test
 
 # Temporary dev certs
-ssl
+ssl/localhost.crt
+ssl/localhost.key
