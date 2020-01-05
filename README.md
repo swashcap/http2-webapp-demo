@@ -26,21 +26,15 @@ This project demos a [Preact][preact] + [Node.js][node] web application with a [
     ./scripts/certs.sh
     ```
 
-    Follow the `sudo security add-trusted-cert` instruction to trust the certificate on your machine.
-2. Build the app image:
-
-    ```shell
-    docker-compose build
-    ```
-
-3. Start
+    (Follow the `sudo security add-trusted-cert` instruction to trust the certificate on your machine.)
+2. Build the app and start everything:
 
     ```shell
     docker-compose up
     ```
 
-4. Visit <https://localhost:4000/>
-5. You will see a different initiator in your browser's network tab. For example, in Chrome:
+3. Visit <https://localhost:4000/>
+4. Examine the requests in your browser's network tab. In Chrome you will see a different asset initiator:
 
     ![HTTP/2 requests in Chrome's network tab](./img/http2-in-chrome.jpg)
 
