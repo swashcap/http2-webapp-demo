@@ -44,7 +44,7 @@ export const server = http.createServer((req, res) => {
 
   res.write(
     `<!doctype html>
-<html className="lh-copy sans-serif" lang="en">
+<html class="lh-copy sans-serif" lang="en">
   <head>
     <meta charSet="utf-8">
     <title>HTTP2 Webapp Demo</title>
